@@ -1,11 +1,11 @@
 fun main() {
     fun part1(input: List<String>): Int {
         val (numIncreases, lastMeasurement) = input
-            .fold(Pair(0, 0)) { sumPair, measurement ->
+            .fold(Pair(0, 0)) { acc, measurement ->
                 when {
-                    sumPair.first == 0 && sumPair.second == 0 -> Pair(0, measurement.toInt())
-                    measurement.toInt() > sumPair.second -> Pair(sumPair.first + 1, measurement.toInt())
-                    else -> Pair(sumPair.first, measurement.toInt())
+                    acc.first == 0 && acc.second == 0 -> Pair(0, measurement.toInt())
+                    measurement.toInt() > acc.second -> Pair(acc.first + 1, measurement.toInt())
+                    else -> Pair(acc.first, measurement.toInt())
                 }
             }
 
@@ -13,13 +13,19 @@ fun main() {
     }
 
     fun part2(input: List<String>): Int {
-        return input.size
-//        val (numIncreases, lastWindow, lastMeasurement) = input
-//            .fold(Triple(0, Triple(0, 0, 0), 0)) { sumTriple, measurement ->
-//                when {
-//
-//                }
-//            }
+        val (numIncreases, lastWindow) = input.fold(Pair(0, Triple(0, 0, 0))) { acc, measurement ->
+            val lastWindow = acc.second
+            val nextWindow = Triple(lastWindow.second, lastWindow.third, measurement.toInt())
+            
+            when {
+                lastWindow.toList().any { x -> x == 0 } -> Pair(0, nextWindow)
+                nextWindow.toList().reduce { x, i -> x + i } > lastWindow.toList().reduce { y, i -> y + i } ->
+                    Pair(acc.first + 1, nextWindow)
+                else -> Pair(acc.first, nextWindow)
+            }
+        }
+
+        return numIncreases
     }
 
     // test if implementation meets criteria from the description, like:
