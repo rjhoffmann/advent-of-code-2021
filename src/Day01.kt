@@ -1,32 +1,7 @@
 fun main() {
-    fun part1(input: List<String>): Int {
-        val (numIncreases, lastMeasurement) = input
-            .fold(Pair(0, 0)) { acc, measurement ->
-                when {
-                    acc.first == 0 && acc.second == 0 -> Pair(0, measurement.toInt())
-                    measurement.toInt() > acc.second -> Pair(acc.first + 1, measurement.toInt())
-                    else -> Pair(acc.first, measurement.toInt())
-                }
-            }
-
-        return numIncreases
-    }
-
-    fun part2(input: List<String>): Int {
-        val (numIncreases, lastWindow) = input.fold(Pair(0, Triple(0, 0, 0))) { acc, measurement ->
-            val lastWindow = acc.second
-            val nextWindow = Triple(lastWindow.second, lastWindow.third, measurement.toInt())
-            
-            when {
-                lastWindow.toList().any { x -> x == 0 } -> Pair(0, nextWindow)
-                nextWindow.toList().reduce { x, i -> x + i } > lastWindow.toList().reduce { y, i -> y + i } ->
-                    Pair(acc.first + 1, nextWindow)
-                else -> Pair(acc.first, nextWindow)
-            }
-        }
-
-        return numIncreases
-    }
+    fun count(numbers: List<Int>) = numbers.zipWithNext().count { (x, y) -> y > x }
+    fun part1(input: List<String>) = count(input.map(String::toInt))
+    fun part2(input: List<String>) = count(input.map(String::toInt).windowed(3) { it.sum() })
 
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day01_test")
