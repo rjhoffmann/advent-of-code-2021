@@ -40,8 +40,8 @@ fun main() {
         return depth * position
     }
 
-//    val testInput = readInput("Day02_test")
-//    check(part1(testInput) == 7)
+    val testInput = readInput("Day02_test")
+    check(part1(testInput) == 150)
 
     val input = readInput("Day02")
 
